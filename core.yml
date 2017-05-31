@@ -1,0 +1,105 @@
+version: "3"
+services:
+  logspout:
+    image: "gliderlabs/logspout:latest"
+    command: "${LOGSPOUT_COMMAND}"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    environment:
+      SYSLOG_HOSTNAME: "${LOGSPOUT_NAME}"
+    networks:
+      - "traefik-net"
+    deploy:
+      mode: "global"
+  traefik:
+    image: "traefik:v1.2.3-alpine"
+    command: "--docker --docker.swarmmode --docker.domain=${DOMAIN} --docker.watch --web --entryPoints='Name:http Address::80' --entryPoints='Name:https Address::443 TLS' --defaultEntryPoints=http,https --acme.entryPoint=https --acme.email=${LETSENCRYPT_EMAIL} --acme.storage=/etc/traefik/acme/acme.json --logLevel=${TRAEFIK_LOG}"
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:8080"
+    networks:
+      - "traefik-net"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "/var/tmp:/etc/traefik/acme"
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
+      update_config:
+        delay: 5s
+      resources:
+        limits:
+          memory: 500M
+        reservations:
+          memory: 200M
+  viz:
+    image: "manomarks/visualizer"
+    ports:
+      - "8080"
+    networks:
+      - "traefik-net"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
+      labels:
+        - "traefik.port=8080"
+        - "traefik.docker.network=traefik-net"
+  portainer:
+    image: "portainer/portainer"
+    ports:
+      - "9000"
+    networks:
+      - "traefik-net"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
+      labels:
+        - "traefik.port=9000"
+        - "traefik.docker.network=traefik-net"
+  ops:
+    image: "firstandthird/ops:latest"
+    environment:
+      OPS_VERBOSE: 1
+    deploy:
+      mode: "global"
+  auth:
+    image: "firstandthird/github-authorizedkeys"
+    environment:
+      GITHUB_USERS: "${GITHUB_USERS}"
+    volumes:
+      - "${HOME}/.ssh:/user/.ssh"
+    deploy:
+      mode: "global"
+      restart_policy:
+        condition: none
+  autodeploy:
+    image: "firstandthird/docker-autodeploy:0.3.0"
+    environment:
+      SLACK_HOOK: "${DEPLOY_SLACK_HOOK}"
+      DOMAIN: "${DOMAIN}"
+      SECRET: "${DEPLOY_SECRET}"
+      DOCKER_REGISTRY_AUTH: 1
+      SWARM_MODE: 1
+    networks:
+      - "traefik-net"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "${HOME}/.docker:/home/app/.docker"
+    deploy:
+      labels:
+        - "traefik.port=8080"
+        - "traefik.docker.network=traefik-net"
+      placement:
+        constraints:
+          - node.role == manager
+networks:
+  traefik-net:
+    external: true
