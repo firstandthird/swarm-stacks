@@ -12,7 +12,7 @@ services:
     deploy:
       mode: "global"
   traefik:
-    image: "traefik:v1.2.3-alpine"
+    image: "traefik:v1.3-alpine"
     command: "--docker --docker.swarmmode --docker.domain=${DOMAIN} --docker.watch --web --entryPoints='Name:http Address::80' --entryPoints='Name:https Address::443 TLS' --defaultEntryPoints=http,https --acme.entryPoint=https --acme.email=${LETSENCRYPT_EMAIL} --acme.storage=/etc/traefik/acme/acme.json --logLevel=${TRAEFIK_LOG}"
     ports:
       - "80:80"
