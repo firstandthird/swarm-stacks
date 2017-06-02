@@ -13,7 +13,7 @@ services:
       mode: "global"
   traefik:
     image: "traefik:v1.3-alpine"
-    command: "--docker --docker.swarmmode --docker.domain=${DOMAIN} --docker.watch --web --entryPoints='Name:http Address::80' --entryPoints='Name:https Address::443 TLS' --defaultEntryPoints=http,https --acme.entryPoint=https --acme.email=${LETSENCRYPT_EMAIL} --acme.storage=/etc/traefik/acme/acme.json --acme.OnHostRule=true --logLevel=${TRAEFIK_LOG}"
+    command: "--docker --docker.swarmmode --docker.domain=${DOMAIN} --docker.watch --web --entryPoints='Name:http Address::80' --entryPoints='Name:https Address::443 TLS' --defaultEntryPoints=http,https --acme.entryPoint=https --acme.email=${LETSENCRYPT_EMAIL} --acme.storage=/etc/traefik/acme/acme.json --acme.onHostRule=true --logLevel=${TRAEFIK_LOG}"
     ports:
       - "80:80"
       - "443:443"
@@ -66,8 +66,6 @@ services:
         - "traefik.docker.network=traefik-net"
   ops:
     image: "firstandthird/ops:latest"
-    environment:
-      OPS_VERBOSE: 1
     deploy:
       mode: "global"
   auth:
