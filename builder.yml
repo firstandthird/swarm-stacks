@@ -19,3 +19,6 @@ services:
       labels:
         - "traefik.port=8080"
         - "traefik.docker.network=traefik-net"
+networks:
+  traefik-net:
+    external: true
