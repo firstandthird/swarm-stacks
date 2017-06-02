@@ -8,10 +8,10 @@ services:
       GITHUB_TOKEN: '${GITHUB_TOKEN}'
       SLACK_HOOK: '${BUILDER_SLACK_HOOK}'
       SECRET: '${BUILDER_SECRET}'
+      RAPPTOR_CONFIG_URL: '${BUILDER_CONFIG_URL}'
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
       - "$HOME/.docker:/home/app/.docker"
-      - "${BUILDER_CONFIG}:/home/app/src/conf/default-builder.yml"
     networks:
       - "traefik-net"
     deploy:
