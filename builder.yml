@@ -5,7 +5,7 @@ services:
     ports:
       - "8080"
     environment:
-      GITHUB_TOKEN: '${GITHUB_TOKEN}'
+      GITHUB_TOKEN: '${BUILDER_GITHUB_TOKEN}'
       SLACK_HOOK: '${BUILDER_SLACK_HOOK}'
       SECRET: '${BUILDER_SECRET}'
       RAPPTOR_CONFIG_URL: '${BUILDER_CONFIG_URL}'
