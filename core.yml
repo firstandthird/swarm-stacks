@@ -81,7 +81,7 @@ services:
       restart_policy:
         condition: none
   autodeploy:
-    image: "firstandthird/docker-autodeploy:1.0.0"
+    image: "firstandthird/docker-autodeploy:1.1.1"
     environment:
       SLACK_HOOK: "${DEPLOY_SLACK_HOOK}"
       SECRET: "${DEPLOY_SECRET}"
