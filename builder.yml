@@ -11,11 +11,12 @@ services:
       RAPPTOR_CONFIG_URL: '${BUILDER_CONFIG_URL}'
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
+      - "/repos:/repos"
       - "$HOME/.docker:/home/app/.docker"
     networks:
       - "traefik-net"
     deploy:
-      replicas: 2
+      replicas: 1
       labels:
         - "traefik.port=8080"
         - "traefik.docker.network=traefik-net"
