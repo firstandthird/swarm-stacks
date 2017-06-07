@@ -81,12 +81,11 @@ services:
       restart_policy:
         condition: none
   autodeploy:
-    image: "firstandthird/docker-autodeploy:0.3.0"
+    image: "firstandthird/docker-autodeploy:1.0.0"
     environment:
       SLACK_HOOK: "${DEPLOY_SLACK_HOOK}"
-      DOMAIN: "${DOMAIN}"
       SECRET: "${DEPLOY_SECRET}"
-      DOCKER_REGISTRY_AUTH: 1
+      RAPPTOR_CONFIG_URL: '${DEPLOY_CONFIG_URL}'
       SWARM_MODE: 1
     networks:
       - "traefik-net"
