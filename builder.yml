@@ -1,7 +1,7 @@
 version: '3'
 services:
   autobuild:
-    image: 'firstandthird/docker-autobuild:1.1.0'
+    image: 'firstandthird/docker-autobuild:1.2.0'
     ports:
       - "8080"
     environment:
