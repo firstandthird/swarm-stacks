@@ -51,6 +51,7 @@ services:
         - "traefik.docker.network=traefik-net"
   portainer:
     image: "portainer/portainer"
+    command: "-H unix:///var/run/docker.sock"
     ports:
       - "9000"
     networks:
