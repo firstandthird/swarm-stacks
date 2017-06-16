@@ -86,7 +86,6 @@ services:
     environment:
       SLACK_HOOK: "${DEPLOY_SLACK_HOOK}"
       SECRET: "${DEPLOY_SECRET}"
-      RAPPTOR_CONFIG_URL: '${DEPLOY_CONFIG_URL}'
       SWARM_MODE: 1
     networks:
       - "traefik-net"
