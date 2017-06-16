@@ -8,7 +8,7 @@ services:
       GITHUB_TOKEN: '${BUILDER_GITHUB_TOKEN}'
       SLACK_HOOK: '${BUILDER_SLACK_HOOK}'
       SECRET: '${BUILDER_SECRET}'
-      RAPPTOR_CONFIG_URL: '${BUILDER_CONFIG_URL}'
+      CONFIG_URL: '${BUILDER_CONFIG_URL}'
       NODE_ENV: 'production'
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
